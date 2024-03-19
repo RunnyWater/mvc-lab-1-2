@@ -29,6 +29,17 @@ app.get('/student', handleStudent);
 app.post('/student', (req, res) => {
     const data = req.body;
     fs.writeFileSync(`${data.code}.txt`, JSON.stringify(data));
-    res.redirect('/student');
+    res.redirect('/student-profile');
    });
+
+app.get('/student-profile', (req, res) => {
+    // Tutaj możemy wczytać dane studenta z pliku i przekazać je do widoku.
+    // Na przykład, jeśli mamy plik '12345.txt', możemy go wczytać i przekazać dane do widoku.
+    const studentData = JSON.parse(fs.readFileSync('12345.txt', 'utf8'));
+    res.send(student.renderPage(studentData));
+   });
+   
+      
+
+   
    
