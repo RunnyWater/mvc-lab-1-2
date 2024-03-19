@@ -31,10 +31,9 @@ app.get('/student', (req, res) => {
 });
 
 
-const { handleHome, handleStudent } = require('./routes');
+const { handleHome } = require('./routes');
 
 app.get('/', handleHome);
-app.get('/student', handleStudent);
 
 app.post('/student', (req, res) => {
     const data = req.body;
