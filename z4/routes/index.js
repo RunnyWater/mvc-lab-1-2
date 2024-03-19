@@ -6,5 +6,5 @@ exports.handleHome = (req, res) => {
 };
 
 exports.handleStudent = (req, res) => {
- res.send(student.renderPage());
+    res.send(student.renderPage(req));
 };
