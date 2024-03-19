@@ -2,44 +2,51 @@ const express = require('express');
 const app = express();
 const PORT = 3000;
 
+const bodyParser = require('body-parser');
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
 app.listen(PORT, () => {
  console.log(`Server is running on ${PORT}`);
 });
 
 const home = require('./views/home');
 const student = require('./views/student');
+const fs = require('fs');
 
 app.get('/', (req, res) => {
  res.send(home.renderPage());
 });
 
 app.get('/student', (req, res) => {
- res.send(student.renderPage());
+    const data = {
+        code: req.query.code,
+        name: req.query.name,
+        lastname: req.query.lastname,
+        gender: req.query.gender,
+        age: req.query.age,
+        studyField: req.query.studyField
+    };
+    res.send(student.renderPage(data));
 });
 
-app.use((req, res) => {
-    res.status(404).send('404 Not Found');
-   });
 
-const { handleHome, handleStudent } = require('./routes');
+const { handleHome } = require('./routes');
 
 app.get('/', handleHome);
-app.get('/student', handleStudent);
 
 app.post('/student', (req, res) => {
     const data = req.body;
     fs.writeFileSync(`${data.code}.txt`, JSON.stringify(data));
-    res.redirect('/student-profile');
-   });
+    res.redirect(`/student?code=${data.code}&name=${data.name}&lastname=${data.lastname}&gender=${data.gender}&age=${data.age}&studyField=${data.studyField}`);
+});
 
-app.get('/student-profile', (req, res) => {
-    // Tutaj możemy wczytać dane studenta z pliku i przekazać je do widoku.
-    // Na przykład, jeśli mamy plik '12345.txt', możemy go wczytać i przekazać dane do widoku.
-    const studentData = JSON.parse(fs.readFileSync('12345.txt', 'utf8'));
-    res.send(student.renderPage(studentData));
+
+app.use((req, res) => {
+    res.status(404).send('404 Not Found');
    });
-   
       
+   
 
    
    

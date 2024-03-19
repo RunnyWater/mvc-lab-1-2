@@ -18,4 +18,6 @@ function renderPage(data) {
      </html>
   `;
  }
+
+module.exports = { renderPage };
  
